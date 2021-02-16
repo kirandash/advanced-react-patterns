@@ -91,9 +91,10 @@ yarn dev
 
 ### 1.3 [Medium clap component](https://www.freecodecamp.org/news/how-i-re-built-the-medium-clap-effect-and-what-i-got-out-of-the-experiment-991672995fdf/)
 
-## 2. The medium clap real world component for studying advanced React Patterns
+## 2. The medium clap real world component for studying advanced React Patterns - with **HOC Pattern**
+- Code (patterns/01.js)
 
-## 3. Custom Hooks
+## 3. Custom Hooks Pattern
 ### 3.1 Custom Hooks and refs, useCallbacks
 - Accessing DOM elements while using reusable components
     - DOM elements can be accessed using id or class selector. But it is alright when using HOC with classes. since they have single instance. But while using hooks or fns, the elements are on global window. So we will have to use unique class names viz: 'kiran-123' or even better use: **refs**.
@@ -120,3 +121,47 @@ yarn dev
     - [Docs](https://reactjs.org/docs/hooks-reference.html#uselayouteffect)
     - The signature is identical to useEffect, but it fires synchronously after all DOM mutations. Use this to read layout from the DOM and synchronously re-render. Updates scheduled inside useLayoutEffect will be flushed synchronously, before the browser has a chance to paint.
     - usage: DOM animations etc
+
+## 4 Compound Components Pattern
+### 4.1 Understanding CC (src/03.js)
+- Exposing both main and children components to user instead of exposing a large lump viz partent component
+    - Ex: MediumClap component is a large component that we are exposing
+    - Implementing the compound components pattern we will expose MediumClap and also the ClapIcon, CountTotal, ClapCount components.
+
+### 4.2 Why Compound Components
+- **Benefits**:
+    - Customizability
+    - Understandable API: easily readable
+    - Props overload
+        - If we expose only the parent component: all props for children has to be passed through parent.
+        - If we expose the child component: we can send props to the right child component
+
+### 4.3 How to implement the pattern
+- All the driving logic will be passed in to parent component (MediumClap)
+    - MediumClap: locomotive
+        - ClapIcon, CountTotal, ClapCount: carriages or context object
+
+### 4.4 Refactor to compound components
+- Use context object to share data b/w main and child components
+    - [Docs](https://reactjs.org/docs/context.html)
+- Provider: contains values for child component in context obj
+- useMemo: to pass props to Provider
+    - not pass props directly as object
+    - since if outer component changes: provider will re-render and pass props again
+    - useMemo so that calculation doesn't happen every time
+- For child components: Instead of getting data from props, get it from context
+
+### 4.5 Alternative export strategy
+- Method 1: `import MediumClap, { ClapIcon, ClapCount, CountTotal } from 'medium-clap'`
+    - Have to import parent and child components separately
+- Method 2: `import MediumClap from 'medium-clap'`
+    - Use: `MediumClap.Icon`
+- Both methods are equally valid
+
+### 4.6 Exposing state via a callback
+- Add callback onClap to MediumClap
+    - trigger callback using useEffect every time count changes
+    - the callback will also occur on componentDidMount
+
+### 4.7 Invoking the useEffect callback only after mount
+- using useRef hook

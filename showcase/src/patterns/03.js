@@ -127,7 +127,9 @@ const initialState = {
   isClicked: false
 }
 
+// Create context to share data b/w parent and child components
 const MediumClapContext = createContext()
+// provider that provides values to all child components from context object
 const { Provider } = MediumClapContext
 
 const MediumClap = ({ children, onClap }) => {
@@ -163,15 +165,19 @@ const MediumClap = ({ children, onClap }) => {
     })
   }
 
+  // Invoking the useEffect callback only after mount
   const componentJustMounted = useRef(true)
 
+  // trigger callback every time clap count changes
   useEffect(() => {
+    // Don't trigger the callback on first mount
     if (!componentJustMounted.current) {
       onClap(clapState)
     }
     componentJustMounted.current = false
   }, [count, onClap])
 
+  // memoized data for Provider instead of directly passing props
   const memoizedValue = useMemo(
     () => ({
       ...clapState,
@@ -180,6 +186,7 @@ const MediumClap = ({ children, onClap }) => {
     [clapState, setRef]
   )
 
+  // Wrap content of MediumClap component with Provider
   return (
     <Provider value={memoizedValue}>
       <button
@@ -200,6 +207,7 @@ const MediumClap = ({ children, onClap }) => {
   ==================================== **/
 
 const ClapIcon = () => {
+  // For child components: Instead of getting data from props, get it from context
   const { isClicked } = useContext(MediumClapContext)
   return (
     <span>
@@ -216,6 +224,7 @@ const ClapIcon = () => {
   )
 }
 const ClapCount = () => {
+  // For child components: Instead of getting data from props, get it from context
   const { count, setRef } = useContext(MediumClapContext)
   return (
     <span ref={setRef} data-refkey='clapCountRef' className={styles.count}>
@@ -224,6 +233,7 @@ const ClapCount = () => {
   )
 }
 const CountTotal = () => {
+  // For child components: Instead of getting data from props, get it from context
   const { countTotal, setRef } = useContext(MediumClapContext)
   return (
     <span ref={setRef} data-refkey='clapTotalRef' className={styles.total}>
@@ -232,6 +242,7 @@ const CountTotal = () => {
   )
 }
 
+// Alternative export strategy - so individual child components doesn't need to be exported
 MediumClap.Icon = ClapIcon
 MediumClap.Count = ClapCount
 MediumClap.Total = CountTotal
