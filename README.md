@@ -165,3 +165,22 @@ yarn dev
 
 ### 4.7 Invoking the useEffect callback only after mount
 - using useRef hook
+
+## 5. Patterns for crafting reusable styles
+### 5.1 Intro to reusable styles
+- We must allow user to be able to change styles of our reusable component
+- can overwrite styles in 2 ways:
+    - inline style
+    - class name
+
+### 5.2 Extending styles via a style prop (src/patterns/04.js)
+- Allowing user to be able to style any of the child components
+    - MediumClap.Icon, MediumClap.Count and MediumClap.Total
+- Inline styles are not cool
+
+### 5.3 Extending styles via a className prop
+- extending style with class name
+- `className={userStyles.icon}`
+- combining class names: 
+    - combining multiple class names - our class name and users class names
+    - using array to combine classes is much cleaner than using ${} string concatenation

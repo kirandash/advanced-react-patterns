@@ -12,6 +12,7 @@ import React, {
 import mojs from 'mo-js'
 import { generateRandomNumber } from '../utils/generateRandomNumber'
 import styles from './index.css'
+// user styles
 import userStyles from './usage.css'
 
 /** ====================================
@@ -131,10 +132,13 @@ const initialState = {
 const MediumClapContext = createContext()
 const { Provider } = MediumClapContext
 
+
 const MediumClap = ({
   children,
   onClap,
+  // extending style with className prop
   className = '',
+  // style with alias - extending style with style prop
   style: userStyles = {}
 }) => {
   const MAXIMUM_USER_CLAP = 50
@@ -184,7 +188,9 @@ const MediumClap = ({
     }),
     [clapState, setRef]
   )
-
+  
+  // combining multiple class names - our class name and users class names
+  // using array to combine classes is much cleaner than using ${} string concatenation
   const classNames = [styles.clap, className].join(' ').trim()
 
   return (
@@ -210,6 +216,9 @@ Smaller Component used by <MediumClap />
 
 const ClapIcon = ({ className = '', style: userStyles = {} }) => {
   const { isClicked } = useContext(MediumClapContext)
+
+  // combining multiple class names - our class name and users class names
+  // using array to combine classes is much cleaner than using ${} string concatenation
   const classNames = [styles.icon, isClicked ? styles.checked : '', className]
     .join(' ')
     .trim()
@@ -231,6 +240,9 @@ const ClapIcon = ({ className = '', style: userStyles = {} }) => {
 }
 const ClapCount = ({ className = '', style: userStyles = {} }) => {
   const { count, setRef } = useContext(MediumClapContext)
+
+  // combining multiple class names - our class name and users class names
+  // using array to combine classes is much cleaner than using ${} string concatenation
   const classNames = [styles.count, className].join(' ').trim()
 
   return (
@@ -246,6 +258,9 @@ const ClapCount = ({ className = '', style: userStyles = {} }) => {
 }
 const CountTotal = ({ className = '', style: userStyles = {} }) => {
   const { countTotal, setRef } = useContext(MediumClapContext)
+
+  // combining multiple class names - our class name and users class names
+  // using array to combine classes is much cleaner than using ${} string concatenation
   const classNames = [styles.total, className].join(' ').trim()
 
   return (
