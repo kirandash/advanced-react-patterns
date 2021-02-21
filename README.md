@@ -184,3 +184,19 @@ yarn dev
 - combining class names: 
     - combining multiple class names - our class name and users class names
     - using array to combine classes is much cleaner than using ${} string concatenation
+
+## 6 The control Props pattern (src/patterns/05.js)
+
+### 6.1 Problem to be solved
+- Allowing user to control component's internal props
+    - count, countTotal, isClicked
+
+### 6.2 What is control props
+- concept similar to controlled inputs: (inputs controlled with value and onChange event)
+- **controlled props**: we will make MediumClap a controlled component so user can pass callback and value to it
+- `<MediumClap values={} onClap={} />`
+
+### 6.3 Implementing the pattern
+
+### 6.4 Practical usage
+

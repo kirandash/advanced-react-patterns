@@ -132,7 +132,7 @@ const { Provider } = MediumClapContext
 const MediumClap = ({
   children,
   onClap = () => {},
-  values = null,
+  values = null, // allowing values to be controlled by user
   className = '',
   style: userStyles = {}
 }) => {
@@ -157,12 +157,14 @@ const MediumClap = ({
     burstEl: clapRef
   })
 
+  // Check if values is being passed and set controlled component
   // Controlled Component??
   // isControlled = value !== undefined
   const isControlled = !!values
 
   const handleClapClick = () => {
     animationTimeline.replay()
+    // if component is controoled: call user defined fn onClap otherwise set state
     isControlled
       ? onClap()
       : setClapState({
@@ -175,17 +177,22 @@ const MediumClap = ({
   const componentJustMounted = useRef(true)
 
   useEffect(() => {
+    // call onClap method with clap state only if component is not controlled
+    // since user might have their own data. and we should not pass state data
     if (!componentJustMounted.current && !isControlled) {
       onClap(clapState)
     }
     componentJustMounted.current = false
   }, [count, onClap, isControlled])
 
+  // if component is controlled: get values from user or use the component state
+  
   const getState = useCallback(() => (isControlled ? values : clapState), [
     isControlled,
     clapState,
     values
-  ])
+  ] // dependency array being passed with useCallback to getState instead of passing it to useMemo
+  )
 
   const memoizedValue = useMemo(() => {
     return {
@@ -279,6 +286,7 @@ MediumClap.Total = CountTotal
       may consume the component API
   ==================================== **/
 
+// Medium Clap data in parent component - diff from child
 const MAXIMUM_USER_CLAP = 10
 const INITIAL_STATE = {
   count: 0,
@@ -287,8 +295,10 @@ const INITIAL_STATE = {
 }
 
 const Usage = () => {
+  // using values in parent component
   const [clapValues, setClapValues] = useState(INITIAL_STATE)
 
+  // using callback in parent component
   const onClap = () => {
     setClapValues(({ count, countTotal }) => ({
       count: Math.min(count + 1, MAXIMUM_USER_CLAP),
